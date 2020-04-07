@@ -1,2 +1,2 @@
 # AmazonPriceTracker
-Telegram bot to check the price change of amazon products
+Telegram bot to check the price change of products on Amazon and CamelCamelCamel
