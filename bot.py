@@ -1,7 +1,6 @@
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, ConversationHandler)
 from telegram import ReplyKeyboardMarkup
 from emoji import emojize
-from time import sleep
 import validators
 import json
 
@@ -35,9 +34,9 @@ reply_keyboard = [
         emojize(':wastebasket: Remove', use_aliases=True),
         emojize(":twisted_rightwards_arrows: Change name", use_aliases=True)
     ],
-    # [
-    #     emojize(":information_source: Help", use_aliases=True)
-    # ]
+    [
+        emojize(":information_source: Help", use_aliases=True)
+    ]
 ]
 
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
@@ -159,12 +158,13 @@ def add_update_db(update, context):
 
     if check_url(product_details["url"]) and (not ProductService().check_amazon_url(product_details["url"])):
         res = ProductService().create(product_details["name"], product_details["url"])
+        actual_price = str(ProductService().get_amazon_price(product_details["url"]))
 
         if res["amazon"] and res["camel"]:
-            update.message.reply_text("Done", reply_markup=markup)  # TODO: Show name and actual price of the product
+            update.message.reply_text("Done, now, the current price is €" + actual_price, reply_markup=markup)
 
         elif res["amazon"] and not res["camel"]:
-            update.message.reply_text("Added only in the Amazon table", reply_markup=markup)
+            update.message.reply_text("Added only in the Amazon table, now, the current price is €" + actual_price, reply_markup=markup)
 
         else:
             update.message.reply_text("Error", reply_markup=markup)
@@ -310,11 +310,15 @@ def get_url_search_db(update, context):
         get_url_set_name(update, context)
 
 
-# TODO: Show all '/' command
-# def command_list(update, context):
-#     update.message.reply_text("command list", reply_markup=markup)
-#
-#     return CHOOSING
+def command_list(update, context):
+    info = "Command list: \n"
+
+    info += "   - /start -> Start bot \n"
+    info += "   - /stop -> Stop any action"
+
+    update.message.reply_text(info, reply_markup=markup)
+
+    return CHOOSING
 
 
 def check_price(context):
@@ -333,7 +337,7 @@ def check_price(context):
 
         camel_info = "Update: \n"
 
-        camel_thread = CrawlerThread(camel_product, camel_crawler, 20)
+        camel_thread = CrawlerThread(camel_product, camel_crawler, 30)
         camel_thread.start()
 
         camel_thread.join()
@@ -386,8 +390,8 @@ def main():
                 MessageHandler(Filters.regex('Remove'), remove_set_name),
                 MessageHandler(Filters.regex('Camel list'), camel_product_list),
                 MessageHandler(Filters.regex('Get url'), get_url_set_name),
-                MessageHandler(Filters.regex('Change name'), change_set_old_name)
-                # MessageHandler(Filters.regex('Help'), command_list)
+                MessageHandler(Filters.regex('Change name'), change_set_old_name),
+                MessageHandler(Filters.regex('Help'), command_list)
             ],
 
             ADD_SECOND_STEP: [

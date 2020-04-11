@@ -102,6 +102,15 @@ class ProductService:
 
         return self.amazon_model.get_url_by_name(name)
 
+    def get_amazon_price(self, url):
+        """
+        Get price of a product by URL
+
+        @param url: URL of the product
+        @return: Price of the product | False
+        """
+        return self.amazon_model.get_price(url)
+
     def get_amazon_urls(self):
         """
         Get all urls in Amazon table
