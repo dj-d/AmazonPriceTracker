@@ -1,11 +1,11 @@
-import sqlite3
+import mysql.connector as mysql
+from database.database import Database
+
 from services.logging_service import LoggingService
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
 logger = logging_service.get_logger()
-
-DB_NAME = "bot.db"
 
 
 class Schema:
@@ -13,15 +13,17 @@ class Schema:
     Provide methods for db management
     """
 
-    def __init__(self, db_name=DB_NAME):
-        self.conn = sqlite3.connect(db_name)
+    def __init__(self):
+        self.conn = Database().get_conn()
         self.curs = self.conn.cursor()
+
         self.create_amazon_table()
         self.create_camel_table()
 
     def __del__(self):
         self.conn.close()
 
+    # TODO: To change
     def create_amazon_table(self):
         """
         Init amazon product table
@@ -41,6 +43,7 @@ class Schema:
         self.curs.execute(query)
         self.conn.commit()
 
+    # TODO: To change
     def create_camel_table(self):
         """
         Init camel product table
@@ -68,13 +71,11 @@ class AmazonModel:
     Provide methods for Amazon product management
     """
 
-    AMAZON_TABLE_NAME = "amazon"
-
-    def __init__(self, db_url=DB_NAME):
-        self.conn = sqlite3.connect(db_url)
-        self.conn.row_factory = sqlite3.Row
+    def __init__(self):
+        self.conn = Database().get_conn()
         self.curs = self.conn.cursor()
 
+    # TODO: To change
     def create(self, name, product_name, url, price):
         """
         Create a new product
@@ -102,6 +103,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def delete(self, url):
         """
         Delete a product by the URL
@@ -126,6 +128,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def get_info(self):
         """
         Get name and price of products
@@ -149,6 +152,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def get_name(self, url):
         """
         Get name of a product by URL
@@ -174,6 +178,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def get_first_name(self):
         """
         Get name at first row of table
@@ -197,6 +202,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def get_price(self, url):
         """
         Get price of a product by URL
@@ -222,6 +228,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def get_urls(self):
         """
         Get all urls
@@ -245,6 +252,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def get_url_by_name(self, name):
         """
         Get the URL by name
@@ -270,6 +278,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def update_name(self, old_name, new_name):
         """
         Change name of a product
@@ -296,6 +305,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def update_price(self, url, new_price):
         """
         Update price of a product by URL
@@ -322,6 +332,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def check_name(self, name):
         """
         Check if a name exists
@@ -349,6 +360,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def check_url(self, url):
         """
         Check if a URL exists
@@ -376,6 +388,7 @@ class AmazonModel:
 
             return False
 
+    # TODO: To change
     def count_product(self):
         """
         Count how many product there are into the table
@@ -405,13 +418,11 @@ class CamelModel:
     Provide methods for camel product management in the table
     """
 
-    CAMEL_TABLE_NAME = "camel"
-
-    def __init__(self, db_url=DB_NAME):
-        self.conn = sqlite3.connect(db_url)
-        self.conn.row_factory = sqlite3.Row
+    def __init__(self):
+        self.conn = Database().get_conn()
         self.curs = self.conn.cursor()
 
+    # TODO: To change
     def create(self, url, type, supplier, price):
         """
         Create a new product
@@ -439,6 +450,7 @@ class CamelModel:
 
             return False
 
+    # TODO: To change
     def delete(self, url):
         """
         Delete a product by the URL
@@ -463,6 +475,7 @@ class CamelModel:
 
             return False
 
+    # TODO: To change
     def get_info(self):
         """
         Get base information of products
@@ -486,6 +499,7 @@ class CamelModel:
 
             return False
 
+    # TODO: To change
     def get_price_info(self, url):
         """
         Get product sellers info
@@ -511,6 +525,7 @@ class CamelModel:
 
             return False
 
+    # TODO: To change
     def get_urls(self):
         """
         Get all urls without duplicates
@@ -534,6 +549,7 @@ class CamelModel:
 
             return False
 
+    # TODO: To change
     def update_price(self, url, type, supplier, new_price):
         """
         Update the price of a specific product from a specific seller
@@ -562,6 +578,7 @@ class CamelModel:
 
             return False
 
+    # TODO: To change
     def check_url(self, url):
         """
         Check if a URL exists
@@ -589,6 +606,7 @@ class CamelModel:
 
             return False
 
+    # TODO: To change
     def count_product(self):
         """
         Count how many product there are in the db

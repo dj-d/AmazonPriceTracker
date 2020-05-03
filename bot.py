@@ -7,19 +7,19 @@ import json
 from services.logging_service import LoggingService
 
 from models.product_model import Schema
-from services import amazon_crawler, camel_crawler
+from crawler import amazon_crawler, camel_crawler
 from services.product_service import ProductService
 
-from services.crawler_thread import CrawlerThread
+from crawler.crawler_thread import CrawlerThread
 
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
 logger = logging_service.get_logger()
 
-with open('credential.json') as json_file:
+with open('credentials.json') as json_file:
     data = json.load(json_file)
-    TOKEN = data["TOKEN"]
+    TOKEN = data["token"]
 
 CHOOSING, ADD_SECOND_STEP, ADD_THIRD_STEP, REMOVE_SECOND_STEP, CHANGE_SECOND_STEP, CHANGE_THIRD_STEP, GET_URL_SECOND_STEP = range(7)
 
