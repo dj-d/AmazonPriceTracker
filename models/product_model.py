@@ -23,7 +23,6 @@ class Schema:
     def __del__(self):
         self.conn.close()
 
-    # TODO: To change
     def create_amazon_table(self):
         """
         Init amazon product table
@@ -33,17 +32,16 @@ class Schema:
 
         query = """
                 CREATE TABLE IF NOT EXISTS "amazon" (
-                name TEXT NOT NULL,
-                product_name TEXT NOT NULL,
-                url TEXT NOT NULL UNIQUE PRIMARY KEY,
-                price REAL NOT NULL
+                name VARCHAR(255) NOT NULL,
+                product_name VARCHAR(255) NOT NULL,
+                url VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
+                price FLOAT NOT NULL
                 );
                 """
 
         self.curs.execute(query)
         self.conn.commit()
 
-    # TODO: To change
     def create_camel_table(self):
         """
         Init camel product table
@@ -53,12 +51,14 @@ class Schema:
 
         query = """
                 CREATE TABLE IF NOT EXISTS "camel" (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                url TEXT NOT NULL,
-                type TEXT NOT NULL,
-                supplier TEXT NOT NULL,
-                price REAL,
-                FOREIGN KEY (url) REFERENCES amazon(url)
+                id INT PRIMARY KEY AUTOINCREMENT,
+                url VARCHAR(255) NOT NULL,
+                type VARCHAR(255) NOT NULL,
+                supplier VARCHAR(255) NOT NULL,
+                price FLOAT,
+                FOREIGN KEY (url) 
+                    REFERENCES amazon(url)
+                    ON DELETE CASCADE 
                 );                
                 """
 
@@ -75,7 +75,6 @@ class AmazonModel:
         self.conn = Database().get_conn()
         self.curs = self.conn.cursor()
 
-    # TODO: To change
     def create(self, name, product_name, url, price):
         """
         Create a new product
@@ -89,7 +88,7 @@ class AmazonModel:
 
         query = """
                 INSERT INTO amazon(name, product_name, url, price)
-                VALUES (?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s)
                 """
 
         try:
@@ -97,13 +96,11 @@ class AmazonModel:
             self.conn.commit()
 
             return True
-
-        except Exception as e:
-            logger.exception("AmazonModel -> create")
+        except mysql.Error:
+            logger.exception("product_model -> create")
 
             return False
 
-    # TODO: To change
     def delete(self, url):
         """
         Delete a product by the URL
@@ -114,7 +111,7 @@ class AmazonModel:
 
         query = """
                 DELETE FROM amazon
-                WHERE url=?
+                WHERE url=%s
                 """
 
         try:
@@ -122,13 +119,11 @@ class AmazonModel:
             self.conn.commit()
 
             return True
-
-        except Exception as e:
-            logger.exception("AmazonModel -> delete")
+        except mysql.Error:
+            logger.exception("product_model -> delete")
 
             return False
 
-    # TODO: To change
     def get_info(self):
         """
         Get name and price of products
@@ -142,17 +137,16 @@ class AmazonModel:
                 """
 
         try:
-            res = self.curs.execute(query).fetchall()
+            self.curs.execute(query)
+            res = self.curs.fetchall()
             self.conn.commit()
 
             return res
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_info")
+        except mysql.Error:
+            logger.exception("product_model -> get_info")
 
             return False
 
-    # TODO: To change
     def get_name(self, url):
         """
         Get name of a product by URL
@@ -164,21 +158,20 @@ class AmazonModel:
         query = """
                 SELECT name
                 FROM amazon
-                WHERE url=?
+                WHERE url=%s
                 """
 
         try:
-            res = self.curs.execute(query, (url,)).fetchone()
+            self.curs.execute(query, (url,))
+            res = self.curs.fetchone()
             self.conn.commit()
 
             return res[0]
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_name")
+        except mysql.Error:
+            logger.exception("product_model -> get_name")
 
             return False
 
-    # TODO: To change
     def get_first_name(self):
         """
         Get name at first row of table
@@ -192,17 +185,16 @@ class AmazonModel:
                 """
 
         try:
-            res = self.curs.execute(query).fetchone()
+            self.curs.execute(query)
+            res = self.curs.fetchone()
             self.conn.commit()
 
             return res[0]
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_first_name")
+        except mysql.Error:
+            logger.exception("product_model -> get_first_name")
 
             return False
 
-    # TODO: To change
     def get_price(self, url):
         """
         Get price of a product by URL
@@ -214,21 +206,20 @@ class AmazonModel:
         query = """
                 SELECT price
                 FROM amazon
-                WHERE url=?
+                WHERE url=%s
                 """
 
         try:
-            res = self.curs.execute(query, (url,)).fetchone()
+            self.curs.execute(query, (url,))
+            res = self.curs.fetchone()
             self.conn.commit()
 
             return res[0]
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_price")
+        except mysql.Error:
+            logger.exception("product_model -> get_price")
 
             return False
 
-    # TODO: To change
     def get_urls(self):
         """
         Get all urls
@@ -242,17 +233,16 @@ class AmazonModel:
                 """
 
         try:
-            res = self.curs.execute(query).fetchall()
+            self.curs.execute(query)
+            res = self.curs.fetchall()
             self.conn.commit()
 
             return res
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_urls")
+        except mysql.Error:
+            logger.exception("product_model -> get_urls")
 
             return False
 
-    # TODO: To change
     def get_url_by_name(self, name):
         """
         Get the URL by name
@@ -264,21 +254,20 @@ class AmazonModel:
         query = """
                 SELECT url
                 FROM amazon
-                WHERE name=?
+                WHERE name=%s
                 """
 
         try:
-            res = self.curs.execute(query, (name,)).fetchone()
+            self.curs.execute(query, (name,))
+            res = self.curs.fetchone()
             self.conn.commit()
 
             return res[0]
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_url_by_name")
+        except mysql.Error:
+            logger.exception("product_model -> get_url_by_name")
 
             return False
 
-    # TODO: To change
     def update_name(self, old_name, new_name):
         """
         Change name of a product
@@ -290,8 +279,8 @@ class AmazonModel:
 
         query = """
                 UPDATE amazon
-                SET name=?
-                WHERE name=?
+                SET name=%s
+                WHERE name=%s
                 """
 
         try:
@@ -299,13 +288,11 @@ class AmazonModel:
             self.conn.commit()
 
             return True
-
-        except Exception as e:
-            logger.exception("AmazonModel -> update_name")
+        except mysql.Error:
+            logger.exception("product_model -> update_name")
 
             return False
 
-    # TODO: To change
     def update_price(self, url, new_price):
         """
         Update price of a product by URL
@@ -317,8 +304,8 @@ class AmazonModel:
 
         query = """
                 UPDATE amazon
-                SET price=?
-                WHERE url=?
+                SET price=%s
+                WHERE url=%s
                 """
 
         try:
@@ -326,13 +313,11 @@ class AmazonModel:
             self.conn.commit()
 
             return True
-
-        except Exception as e:
-            logger.exception("AmazonModel -> update_price")
+        except mysql.Error:
+            logger.exception("product_model -> update_price")
 
             return False
 
-    # TODO: To change
     def check_name(self, name):
         """
         Check if a name exists
@@ -345,22 +330,21 @@ class AmazonModel:
                 SELECT EXISTS (
                     SELECT name
                     FROM amazon
-                    WHERE name=?
+                    WHERE name=%s
                 )
                 """
 
         try:
-            res = self.curs.execute(query, (name,)).fetchone()
+            self.curs.execute(query, (name,))
+            res = self.curs.fetchone()
             self.conn.commit()
 
             return bool(res[0])
-
-        except Exception as e:
-            logger.exception("AmazonModel -> check_name")
+        except mysql.Error:
+            logger.exception("product_model -> check_name")
 
             return False
 
-    # TODO: To change
     def check_url(self, url):
         """
         Check if a URL exists
@@ -373,22 +357,21 @@ class AmazonModel:
                 SELECT EXISTS (
                     SELECT name
                     FROM amazon
-                    WHERE url=?
+                    WHERE url=%s
                 )
                 """
 
         try:
-            res = self.curs.execute(query, (url,)).fetchone()
+            self.curs.execute(query, (url,))
+            res = self.curs.fetchone()
             self.conn.commit()
 
             return bool(res[0])
-
-        except Exception as e:
-            logger.exception("AmazonModel -> check_url")
+        except mysql.Error:
+            logger.exception("product_model -> check_url")
 
             return False
 
-    # TODO: To change
     def count_product(self):
         """
         Count how many product there are into the table
@@ -402,13 +385,13 @@ class AmazonModel:
                 """
 
         try:
-            res = self.curs.execute(query).fetchone()
+            self.curs.execute(query)
+            res = self.curs.fetchone()
             self.conn.commit()
 
             return res[0]
-
-        except Exception as e:
-            logger.exception("AmazonModel -> count_product")
+        except mysql.Error:
+            logger.exception("product_model -> count_product")
 
             return False
 
