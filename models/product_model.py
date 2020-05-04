@@ -405,7 +405,6 @@ class CamelModel:
         self.conn = Database().get_conn()
         self.curs = self.conn.cursor()
 
-    # TODO: To change
     def create(self, url, type, supplier, price):
         """
         Create a new product
@@ -419,7 +418,7 @@ class CamelModel:
 
         query = """
                 INSERT INTO camel(url, type , supplier, price)
-                VALUES (?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s)
                 """
 
         try:
@@ -427,13 +426,11 @@ class CamelModel:
             self.conn.commit()
 
             return True
-
-        except Exception as e:
-            logger.exception("CamelModel -> create")
+        except mysql.Error:
+            logger.exception("product_model -> create")
 
             return False
 
-    # TODO: To change
     def delete(self, url):
         """
         Delete a product by the URL
@@ -444,7 +441,7 @@ class CamelModel:
 
         query = """
                 DELETE FROM camel
-                WHERE url=?
+                WHERE url=%s
                 """
 
         try:
@@ -452,13 +449,11 @@ class CamelModel:
             self.conn.commit()
 
             return True
-
-        except Exception as e:
-            logger.exception("CamelModel -> delete")
+        except mysql.Error:
+            logger.exception("product_model -> delete")
 
             return False
 
-    # TODO: To change
     def get_info(self):
         """
         Get base information of products
@@ -472,17 +467,16 @@ class CamelModel:
                 """
 
         try:
-            res = self.curs.execute(query).fetchall()
+            self.curs.execute(query)
+            res = self.curs.fetchall()
             self.conn.commit()
 
             return res
-
-        except Exception as e:
-            logger.exception("CamelModel -> get_info")
+        except mysql.Error:
+            logger.exception("product_model -> get_info")
 
             return False
 
-    # TODO: To change
     def get_price_info(self, url):
         """
         Get product sellers info
@@ -494,21 +488,20 @@ class CamelModel:
         query = """
                 SELECT type, supplier, price
                 FROM camel
-                WHERE url=?
+                WHERE url=%s
                 """
 
         try:
-            res = self.curs.execute(query, (url,)).fetchall()
+            self.curs.execute(query, (url,))
+            res = self.curs.fetchall()
             self.conn.commit()
 
             return res
-
-        except Exception as e:
-            logger.exception("CamelModel -> get_price_info")
+        except mysql.Error:
+            logger.exception("product_model -> get_price_info")
 
             return False
 
-    # TODO: To change
     def get_urls(self):
         """
         Get all urls without duplicates
@@ -522,17 +515,16 @@ class CamelModel:
                 """
 
         try:
-            res = self.curs.execute(query).fetchall()
+            self.curs.execute(query)
+            res = self.curs.fetchall()
             self.conn.commit()
 
             return res
-
-        except Exception as e:
-            logger.exception("CamelModel -> get_urls")
+        except mysql.Error:
+            logger.exception("product_model -> get_urls")
 
             return False
 
-    # TODO: To change
     def update_price(self, url, type, supplier, new_price):
         """
         Update the price of a specific product from a specific seller
@@ -546,8 +538,8 @@ class CamelModel:
 
         query = """
                 UPDATE camel
-                SET price=?
-                WHERE url=? AND type=? AND supplier=?
+                SET price=%s
+                WHERE url=%s AND type=%s AND supplier=%s
                 """
 
         try:
@@ -555,13 +547,11 @@ class CamelModel:
             self.conn.commit()
 
             return True
-
-        except Exception as e:
-            logger.exception("CamelModel -> update_price")
+        except mysql.Error:
+            logger.exception("product_model -> update_price")
 
             return False
 
-    # TODO: To change
     def check_url(self, url):
         """
         Check if a URL exists
@@ -574,7 +564,7 @@ class CamelModel:
                 SELECT EXISTS (
                     SELECT url
                     FROM camel
-                    WHERE url=?
+                    WHERE url=%s
                 )
                 """
 
@@ -583,13 +573,11 @@ class CamelModel:
             self.conn.commit()
 
             return bool(res[0])
-
-        except Exception as e:
-            logger.exception("CamelModel -> check_url")
+        except mysql.Error:
+            logger.exception("product_model -> check_url")
 
             return False
 
-    # TODO: To change
     def count_product(self):
         """
         Count how many product there are in the db
@@ -607,8 +595,7 @@ class CamelModel:
             self.conn.commit()
 
             return int(res[0] / 12)
-
-        except Exception as e:
-            logger.exception("CamelModel -> count_product")
+        except mysql.Error:
+            logger.exception("product_model -> count_product")
 
             return False
