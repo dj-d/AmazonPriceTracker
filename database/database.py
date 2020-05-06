@@ -12,7 +12,7 @@ class Database:
             file = json.load(json_file)
             self.credential = file["db"]
 
-        self.conn = mysql.connect(host="db", database=self.credential["db_name"], user=self.credential["user"], password=self.credential["user_password"])
+        self.conn = mysql.connect(host=self.credential["host"], database=self.credential["db_name"], user=self.credential["user"], password=self.credential["user_password"])
 
     def get_conn(self):
         return self.conn
