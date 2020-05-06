@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from models.product_model import AmazonModel
-from UserAgent import UserAgent
+from user_agent.UserAgent import UserAgent
 from services.logging_service import LoggingService
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)

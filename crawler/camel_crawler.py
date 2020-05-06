@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from UserAgent import UserAgent
+from user_agent.UserAgent import UserAgent
 from models.product_model import CamelModel
 from services.logging_service import LoggingService
 
