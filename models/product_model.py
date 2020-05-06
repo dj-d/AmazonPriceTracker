@@ -31,11 +31,11 @@ class Schema:
         """
 
         query = """
-                CREATE TABLE IF NOT EXISTS "amazon" (
-                name VARCHAR(255) NOT NULL,
-                product_name VARCHAR(255) NOT NULL,
-                url VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
-                price FLOAT NOT NULL
+                CREATE TABLE IF NOT EXISTS amazon(
+                    name VARCHAR(255) NOT NULL,
+                    product_name VARCHAR(255) NOT NULL,
+                    url VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
+                    price FLOAT NOT NULL
                 );
                 """
 
@@ -50,16 +50,16 @@ class Schema:
         """
 
         query = """
-                CREATE TABLE IF NOT EXISTS "camel" (
-                id INT PRIMARY KEY AUTOINCREMENT,
-                url VARCHAR(255) NOT NULL,
-                type VARCHAR(255) NOT NULL,
-                supplier VARCHAR(255) NOT NULL,
-                price FLOAT,
-                FOREIGN KEY (url) 
-                    REFERENCES amazon(url)
-                    ON DELETE CASCADE 
-                );                
+                CREATE TABLE IF NOT EXISTS camel(
+                    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+                    url VARCHAR(255) NOT NULL,
+                    type VARCHAR(255) NOT NULL,
+                    supplier VARCHAR(255) NOT NULL,
+                    price FLOAT,
+                    FOREIGN KEY (url) 
+                        REFERENCES amazon(url)
+                        ON DELETE CASCADE 
+                );
                 """
 
         self.curs.execute(query)

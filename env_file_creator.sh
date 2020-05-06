@@ -22,3 +22,5 @@ DB_USER_PASSWORD=$(jq .db.user_password $CREDENTIAL_FILE)
 echo "MYSQL_PASSWORD=${DB_USER_PASSWORD//\"}" >> .env
 
 echo "MYSQL_PORT=$(jq .db.port $CREDENTIAL_FILE)" >> .env
+
+echo "PMA_PORT=$(jq .phpmyadmin.port $CREDENTIAL_FILE)" >> .env
