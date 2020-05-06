@@ -1,17 +1,10 @@
 #!/bin/bash
 
+cd scripts
+
 # Remove old container
-echo "----- Stop old container -----"
-sudo docker stop $(sudo docker ps --filter name=tracker_bot --filter name=tracker_db --filter name=tracker_phpmyadmin -q)
-
-echo "----- Remove old container -----"
-sudo docker rm $(sudo docker ps -a --filter name=tracker_bot --filter name=tracker_db --filter name=tracker_phpmyadmin -q)
-
-echo "----- Remove old volumes -----"
-sudo docker volume rm $(sudo docker volume ls --filter name=amazonpricetracker_mariadb)
-
-echo "----- Remove old network -----"
-sudo docker network rm $(sudo docker network ls --filter name=amazonpricetracker_default)
+sudo chmod +x delete_old_docker.sh
+sudo ./delete_old_docker.sh
 
 # Install dependencies
 echo "----- Install dependencies -----"
@@ -28,6 +21,10 @@ sudo chmod +x env_file_creator.sh
 sudo ./env_file_creator.sh
 
 echo "----- Created .env file -----"
+
+cd ..
+
+rm errors.log
 
 # Launch docker-compose
 echo "----- Run docker-compose -----"

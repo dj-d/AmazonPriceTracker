@@ -2,6 +2,8 @@
 
 CREDENTIAL_FILE="credentials.json"
 
+cd ..
+
 # Remove old .env file
 rm .env
 
