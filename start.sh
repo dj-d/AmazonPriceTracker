@@ -24,7 +24,10 @@ echo "----- Created .env file -----"
 
 cd ..
 
-rm errors.log
+# Remove old errors.log
+if [ -f "errors.log" ]; then
+  rm errors.log
+fi
 
 # Launch docker-compose
 echo "----- Run docker-compose -----"

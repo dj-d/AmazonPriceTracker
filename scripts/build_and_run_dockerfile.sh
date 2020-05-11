@@ -1,4 +1,5 @@
 #!/bin/bash
+
 cd ..
 
 docker build -t tracker_bot .
