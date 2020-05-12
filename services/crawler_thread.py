@@ -2,6 +2,7 @@ from services.logging_service import LoggingService
 from services.product_service import ProductService
 from threading import Thread
 from time import sleep
+import json
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
@@ -40,14 +41,31 @@ class CrawlerThread(Thread):
                         supplier = new_info[i]["supplier"]
 
                         if float(new_info[i]["actual_price"]) < float(new_info[i]["new_price"]):
-                            self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has risen from €" + str(new_info[i]["actual_price"]) + " to €" + str(new_info[i]["new_price"]))
-
+                            if float(new_info[i]["new_price"]) is not -1:
+                                self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has risen from €" + str(new_info[i]["actual_price"]) + " to €" + str(new_info[i]["new_price"]))
+                            else:
+                                self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has risen from €" + str(new_info[i]["actual_price"]) + " to Not in stock")
                         else:
-                            self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has come down from €" + str(new_info[i]["actual_price"]) + " to €" + str(new_info[i]["new_price"]))
+                            if float(new_info[i]["actual_price"]) is not -1:
+                                self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has come down from €" + str(new_info[i]["actual_price"]) + " to €" + str(new_info[i]["new_price"]))
+                            else:
+                                self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has come down from Not in stock to €" + str(new_info[i]["new_price"]))
 
                         i += 1
+
+                self.changes.append("URL: " + self.get_referral_url(url[0]))
 
             sleep(self.time)
 
     def get_changes(self):
         return self.changes
+
+    @staticmethod
+    def get_referral_url(url):
+        with open('credential.json') as json_file:
+            data = json.load(json_file)
+
+        tag = "?tag="
+        referral_id = data["amazon"]["referral_id"]
+
+        return url[:44] + tag + referral_id
