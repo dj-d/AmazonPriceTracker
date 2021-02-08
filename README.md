@@ -7,9 +7,9 @@ Telegram bot to check the price change of products on Amazon and CamelCamelCamel
 In the credential.json replace "__*YOUR_BOT_TOKEN*__" with the token of your bot.
 
 ```json
-    {
-        "TOKEN": "YOUR_BOT_TOKEN"
-    }
+{
+  "TOKEN": "YOUR_BOT_TOKEN"
+}
 ```
 
 ## Usage
