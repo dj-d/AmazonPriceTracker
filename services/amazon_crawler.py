@@ -10,7 +10,8 @@ logger = logging_service.get_logger()
 
 name_id = "productTitle"
 availability_id = "availability"
-price_id = "priceblock_ourprice"
+our_price_id = "priceblock_ourprice"
+deal_price_id = "priceblock_dealprice"
 
 # header = {"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0"}
 header = {"User-Agent": UserAgent().random()}
@@ -40,8 +41,16 @@ def get_data(url):
         availability = soup.find(id=availability_id).get_text().strip().replace("\n", "").split(".")
 
         if availability[0] != "Attualmente non disponibile":
-            price = float(soup.find(id=price_id).get_text().replace("€", "").replace(",", ".").strip())
-            data["price"] = price
+            raw_price = soup.find(id=our_price_id)
+
+            if raw_price is None:
+                raw_price = soup.find(id=deal_price_id)
+
+            if raw_price is not None:
+                data["price"] = float(raw_price.get_text().replace("€", "").replace(",", ".").strip())
+            else:
+                data["price"] = -1
+                logger.error("amazon_crawler -> Price not find")
 
         else:
             data["price"] = -1
