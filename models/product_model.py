@@ -31,6 +31,7 @@ class Schema:
 
         query = """
                 CREATE TABLE IF NOT EXISTS "amazon" (
+                chat_id INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 product_name TEXT NOT NULL,
                 url TEXT NOT NULL UNIQUE PRIMARY KEY,
@@ -75,7 +76,7 @@ class AmazonModel:
         self.conn.row_factory = sqlite3.Row
         self.curs = self.conn.cursor()
 
-    def create(self, name, product_name, url, price):
+    def create(self, name, product_name, url, price, chat_id):
         """
         Create a new product
 
@@ -87,12 +88,12 @@ class AmazonModel:
         """
 
         query = """
-                INSERT INTO amazon(name, product_name, url, price)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO amazon(chat_id, name, product_name, url, price)
+                VALUES (?, ?, ?, ?, ?)
                 """
 
         try:
-            self.curs.execute(query, [name, product_name, url, price])
+            self.curs.execute(query, [chat_id, name, product_name, url, price])
             self.conn.commit()
 
             return True
@@ -102,7 +103,7 @@ class AmazonModel:
 
             return False
 
-    def delete(self, url):
+    def delete(self, url, chat_id):
         """
         Delete a product by the URL
 
@@ -112,11 +113,11 @@ class AmazonModel:
 
         query = """
                 DELETE FROM amazon
-                WHERE url=?
+                WHERE url=? and chat_id=?
                 """
 
         try:
-            self.curs.execute(query, (url,))
+            self.curs.execute(query, (url, chat_id))
             self.conn.commit()
 
             return True
@@ -126,7 +127,7 @@ class AmazonModel:
 
             return False
 
-    def get_info(self):
+    def get_info(self, chat_id):
         """
         Get name and price of products
 
@@ -136,10 +137,11 @@ class AmazonModel:
         query = """
                 SELECT name, price
                 FROM amazon
+                WHERE chat_id=?
                 """
 
         try:
-            res = self.curs.execute(query).fetchall()
+            res = self.curs.execute(query, (chat_id,)).fetchall()
             self.conn.commit()
 
             return res
@@ -149,7 +151,32 @@ class AmazonModel:
 
             return False
 
-    def get_name(self, url):
+    def get_name(self, url, chat_id):
+        """
+        Get name of a product by URL
+
+        @param url: URL of the product
+        @return: Name of the product | False
+        """
+
+        query = """
+                SELECT name
+                FROM amazon
+                WHERE url=? and chat_id=?
+                """
+
+        try:
+            res = self.curs.execute(query, (url, chat_id)).fetchone()
+            self.conn.commit()
+
+            return res[0]
+
+        except Exception as e:
+            logger.exception("AmazonModel -> get_name")
+
+            return False
+
+    def get_name_thread(self, url):
         """
         Get name of a product by URL
 
@@ -174,7 +201,7 @@ class AmazonModel:
 
             return False
 
-    def get_first_name(self):
+    def get_first_name(self, chat_id):
         """
         Get name at first row of table
 
@@ -184,10 +211,11 @@ class AmazonModel:
         query = """
                 SELECT name
                 FROM amazon
+                WHERE chat_id=?
                 """
 
         try:
-            res = self.curs.execute(query).fetchone()
+            res = self.curs.execute(query, (chat_id,)).fetchone()
             self.conn.commit()
 
             return res[0]
@@ -197,7 +225,7 @@ class AmazonModel:
 
             return False
 
-    def get_price(self, url):
+    def get_price(self, url, chat_id):
         """
         Get price of a product by URL
 
@@ -208,11 +236,11 @@ class AmazonModel:
         query = """
                 SELECT price
                 FROM amazon
-                WHERE url=?
+                WHERE url=? and chat_id=?
                 """
 
         try:
-            res = self.curs.execute(query, (url,)).fetchone()
+            res = self.curs.execute(query, (url, chat_id)).fetchone()
             self.conn.commit()
 
             return res[0]
@@ -222,7 +250,7 @@ class AmazonModel:
 
             return False
 
-    def get_urls(self):
+    def get_urls(self, chat_id):
         """
         Get all urls
 
@@ -232,10 +260,11 @@ class AmazonModel:
         query = """
                 SELECT url
                 FROM amazon
+                WHERE chat_id=?
                 """
 
         try:
-            res = self.curs.execute(query).fetchall()
+            res = self.curs.execute(query, (chat_id,)).fetchall()
             self.conn.commit()
 
             return res
@@ -245,7 +274,7 @@ class AmazonModel:
 
             return False
 
-    def get_url_by_name(self, name):
+    def get_url_by_name(self, name, chat_id):
         """
         Get the URL by name
 
@@ -256,11 +285,11 @@ class AmazonModel:
         query = """
                 SELECT url
                 FROM amazon
-                WHERE name=?
+                WHERE name=? and chat_id=?
                 """
 
         try:
-            res = self.curs.execute(query, (name,)).fetchone()
+            res = self.curs.execute(query, (name, chat_id)).fetchone()
             self.conn.commit()
 
             return res[0]
@@ -270,7 +299,7 @@ class AmazonModel:
 
             return False
 
-    def update_name(self, old_name, new_name):
+    def update_name(self, old_name, new_name, chat_id):
         """
         Change name of a product
 
@@ -282,11 +311,11 @@ class AmazonModel:
         query = """
                 UPDATE amazon
                 SET name=?
-                WHERE name=?
+                WHERE name=? and chat_id=?
                 """
 
         try:
-            self.curs.execute(query, (new_name, old_name))
+            self.curs.execute(query, (new_name, old_name, chat_id))
             self.conn.commit()
 
             return True
@@ -296,7 +325,7 @@ class AmazonModel:
 
             return False
 
-    def update_price(self, url, new_price):
+    def update_price(self, url, new_price, chat_id):
         """
         Update price of a product by URL
 
@@ -308,11 +337,11 @@ class AmazonModel:
         query = """
                 UPDATE amazon
                 SET price=?
-                WHERE url=?
+                WHERE url=? amd chat_id=?
                 """
 
         try:
-            self.curs.execute(query, (new_price, url))
+            self.curs.execute(query, (new_price, url, chat_id))
             self.conn.commit()
 
             return True
@@ -322,7 +351,7 @@ class AmazonModel:
 
             return False
 
-    def check_name(self, name):
+    def check_name(self, name, chat_id):
         """
         Check if a name exists
 
@@ -334,12 +363,12 @@ class AmazonModel:
                 SELECT EXISTS (
                     SELECT name
                     FROM amazon
-                    WHERE name=?
+                    WHERE name=? and chat_id=?
                 )
                 """
 
         try:
-            res = self.curs.execute(query, (name,)).fetchone()
+            res = self.curs.execute(query, (name, chat_id)).fetchone()
             self.conn.commit()
 
             return bool(res[0])
@@ -349,7 +378,7 @@ class AmazonModel:
 
             return False
 
-    def check_url(self, url):
+    def check_url(self, url, chat_id):
         """
         Check if a URL exists
 
@@ -361,12 +390,12 @@ class AmazonModel:
                 SELECT EXISTS (
                     SELECT name
                     FROM amazon
-                    WHERE url=?
+                    WHERE url=? and chat_id=?
                 )
                 """
 
         try:
-            res = self.curs.execute(query, (url,)).fetchone()
+            res = self.curs.execute(query, (url, chat_id)).fetchone()
             self.conn.commit()
 
             return bool(res[0])
@@ -376,7 +405,7 @@ class AmazonModel:
 
             return False
 
-    def count_product(self):
+    def count_product(self, chat_id):
         """
         Count how many product there are into the table
 
@@ -386,10 +415,11 @@ class AmazonModel:
         query = """
                 SELECT COUNT(*)
                 FROM amazon
+                WHERE chat_id=?
                 """
 
         try:
-            res = self.curs.execute(query).fetchone()
+            res = self.curs.execute(query, (chat_id,)).fetchone()
             self.conn.commit()
 
             return res[0]

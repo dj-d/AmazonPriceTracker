@@ -11,7 +11,7 @@ class ProductService:
         self.amazon_model = AmazonModel()
         self.camel_model = CamelModel()
 
-    def create(self, name, url):
+    def create(self, name, url, chat_id):
         """
         Add product
 
@@ -28,7 +28,7 @@ class ProductService:
         amazon_product = amazon_crawler.get_data(url)
 
         if amazon_product:
-            res["amazon"] = self.amazon_model.create(name, amazon_product["name"], url, amazon_product["price"])
+            res["amazon"] = self.amazon_model.create(name, amazon_product["name"], url, amazon_product["price"], chat_id)
 
             res["camel"] = self.create_camel_product(url)
 
@@ -48,7 +48,7 @@ class ProductService:
         else:
             return False
 
-    def delete(self, name):
+    def delete(self, name, chat_id):
         """
         Delete a product
 
@@ -62,18 +62,18 @@ class ProductService:
             "camel": False
         }
 
-        url = self.amazon_model.get_url_by_name(name)
+        url = self.amazon_model.get_url_by_name(name, chat_id)
 
         if self.camel_model.check_url(url):
             res["exists_in_camel"] = True
             res["camel"] = self.camel_model.delete(url)
 
-        if self.amazon_model.check_url(url):
-            res["amazon"] = self.amazon_model.delete(url)
+        if self.amazon_model.check_url(url, chat_id):
+            res["amazon"] = self.amazon_model.delete(url, chat_id)
 
         return res
 
-    def get_name(self, url):
+    def get_name(self, url, chat_id):
         """
         Get name of a product
 
@@ -81,18 +81,28 @@ class ProductService:
         @return: Name of the product | False
         """
 
-        return self.amazon_model.get_name(url)
+        return self.amazon_model.get_name(url, chat_id)
 
-    def get_first_name(self):
+    def get_name_thread(self, url):
+        """
+        Get name of a product
+
+        @param url: URL of the product
+        @return: Name of the product | False
+        """
+
+        return self.amazon_model.get_name_thread(url)
+
+    def get_first_name(self, chat_id):
         """
         Get name at first row of table
 
         @return: Name of the product | False
         """
 
-        return self.amazon_model.get_first_name()
+        return self.amazon_model.get_first_name(chat_id)
 
-    def get_url_by_name(self, name):
+    def get_url_by_name(self, name, chat_id):
         """
         Get the URL by a name
 
@@ -100,25 +110,25 @@ class ProductService:
         @return: String | False
         """
 
-        return self.amazon_model.get_url_by_name(name)
+        return self.amazon_model.get_url_by_name(name, chat_id)
 
-    def get_amazon_price(self, url):
+    def get_amazon_price(self, url, chat_id):
         """
         Get price of a product by URL
 
         @param url: URL of the product
         @return: Price of the product | False
         """
-        return self.amazon_model.get_price(url)
+        return self.amazon_model.get_price(url, chat_id)
 
-    def get_amazon_urls(self):
+    def get_amazon_urls(self, chat_id):
         """
         Get all urls in Amazon table
 
         @return: list(url) | False
         """
 
-        return self.amazon_model.get_urls()
+        return self.amazon_model.get_urls(chat_id)
 
     def get_camel_urls(self):
         """
@@ -129,14 +139,14 @@ class ProductService:
 
         return self.camel_model.get_urls()
 
-    def get_amazon_info(self):
+    def get_amazon_info(self, chat_id):
         """
         Get name and price of a product in Amazon table
 
         @return: tuple(name, price) | False
         """
 
-        res_amazon = self.amazon_model.get_info()
+        res_amazon = self.amazon_model.get_info(chat_id)
 
         if res_amazon:
             return res_amazon
@@ -157,7 +167,7 @@ class ProductService:
 
         return False
 
-    def update_name(self, old_name, new_name):
+    def update_name(self, old_name, new_name, chat_id):
         """
         Change name of a product
 
@@ -166,9 +176,9 @@ class ProductService:
         @return: True | False
         """
 
-        return self.amazon_model.update_name(old_name, new_name)
+        return self.amazon_model.update_name(old_name, new_name, chat_id)
 
-    def check_name(self, name):
+    def check_name(self, name, chat_id):
         """
         Check if a name exists
 
@@ -176,9 +186,9 @@ class ProductService:
         @return: True | False
         """
 
-        return self.amazon_model.check_name(name)
+        return self.amazon_model.check_name(name, chat_id)
 
-    def check_amazon_url(self, url):
+    def check_amazon_url(self, url, chat_id):
         """
         Check if a URL exists in Amazon table
 
@@ -186,7 +196,7 @@ class ProductService:
         @return: True | False
         """
 
-        return self.amazon_model.check_url(url)
+        return self.amazon_model.check_url(url, chat_id)
 
     def check_camel_url(self, url):
 
@@ -199,13 +209,13 @@ class ProductService:
 
         return self.camel_model.check_url(url)
 
-    def count_amazon_product(self):
+    def count_amazon_product(self, chat_id):
         """
         Count how many product there are in Amazon table
 
         @return: Number of rows | False
         """
-        return self.amazon_model.count_product()
+        return self.amazon_model.count_product(chat_id)
 
     def count_camel_product(self):
         """
