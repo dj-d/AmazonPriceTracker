@@ -18,7 +18,7 @@ class CrawlerThread(Thread):
 
     def run(self):
         for url in self.products:
-            name = ProductService().get_name(url[0])
+            name = ProductService().get_name_thread(url[0])
             # service_name = str(self.service).split("/")[8].replace(".py'>", "")
             service_name = str(self.service).split("/")[3].replace(".py'>", "")  # For Docker
 

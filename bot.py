@@ -71,6 +71,16 @@ def check_url(url):
 def start_conversation(update, context):
     global user_id
     user_id = update.message.from_user['id']
+    username = update.message.from_user['username']
+
+    print("user_id: " + str(user_id))
+    print("username: " + str(username))
+
+    msg = "Hi " + username + ",\n" \
+          "This bot was created to track the price of products taken on Amazon.\n" \
+          "It is not yet in final version, but for those who want to contribute the link to the repository is: https://github.com/dj-d/AmazonPriceTracker\n"
+
+    update.message.reply_text(msg, reply_markup=markup)
 
     update.message.reply_text("Choose from the following options:", reply_markup=markup)
 
@@ -78,7 +88,7 @@ def start_conversation(update, context):
 
 
 def amazon_product_list(update, context):
-    products = ProductService().get_amazon_info()
+    products = ProductService().get_amazon_info(update.message.from_user['id'])
 
     info = "Amazon products: \n"
 
@@ -107,7 +117,7 @@ def camel_product_list(update, context):
         i = 0
         while i < len(products):
             if (i % 12) == 0:
-                info += " - " + ProductService().get_name(products[i][0]) + ":\n"  # name
+                info += " - " + ProductService().get_name(products[i][0], update.message.from_user['id']) + ":\n"  # name
 
             if (i % 3) == 0:
                 info += "     - " + products[i][1] + ":\n"  # type
@@ -137,7 +147,7 @@ def add_set_url(update, context):
 
     product_details["name"] = update.message.text
 
-    if not ProductService().check_name(product_details["name"]):
+    if not ProductService().check_name(product_details["name"], update.message.from_user['id']):
         update.message.reply_text("Enter amazon product URL: ", reply_markup=markup)
 
         return ADD_THIRD_STEP
@@ -156,9 +166,9 @@ def add_update_db(update, context):
 
     product_details["url"] = update.message.text
 
-    if check_url(product_details["url"]) and (not ProductService().check_amazon_url(product_details["url"])):
-        res = ProductService().create(product_details["name"], product_details["url"])
-        actual_price = str(ProductService().get_amazon_price(product_details["url"]))
+    if check_url(product_details["url"]) and (not ProductService().check_amazon_url(product_details["url"], update.message.from_user['id'])):
+        res = ProductService().create(product_details["name"], product_details["url"], update.message.from_user['id'])
+        actual_price = str(ProductService().get_amazon_price(product_details["url"], update.message.from_user['id']))
 
         if res["amazon"] and res["camel"]:
             update.message.reply_text("Done, now, the current price is €" + actual_price, reply_markup=markup)
@@ -189,8 +199,8 @@ def remove_set_name(update, context):
 def remove_update_db(update, context):
     name = update.message.text
 
-    if ProductService().check_name(name):
-        res = ProductService().delete(name)
+    if ProductService().check_name(name, update.message.from_user['id']):
+        res = ProductService().delete(name, update.message.from_user['id'])
 
         if (res["amazon"] and res["exists_in_camel"] and res["camel"]) or (res["amazon"] and not res["exists_in_camel"]):
             update.message.reply_text("Done", reply_markup=markup)
@@ -213,7 +223,7 @@ def remove_update_db(update, context):
         
 
 def change_set_old_name(update, context):
-    if ProductService().count_amazon_product() != 0:
+    if ProductService().count_amazon_product(update.message.from_user['id']) != 0:
         update.message.reply_text("Enter current name of the product: ", reply_keyboard=markup)
 
         return CHANGE_SECOND_STEP
@@ -231,7 +241,7 @@ def change_set_new_name(update, context):
     if product_name["old_name"] == "/stop":
         return stop_conversation(update, context)
     
-    elif ProductService().check_name(product_name["old_name"]):
+    elif ProductService().check_name(product_name["old_name"], update.message.from_user['id']):
         update.message.reply_text("Enter new name: ", reply_keyboard=markup)
         
         return CHANGE_THIRD_STEP
@@ -250,8 +260,8 @@ def change_update_db(update, context):
     if product_name["new_name"] == "/stop":
         return stop_conversation(update, context)
 
-    elif not ProductService().check_name(product_name["new_name"]):
-        res = ProductService().update_name(product_name["old_name"], product_name["new_name"])
+    elif not ProductService().check_name(product_name["new_name"], update.message.from_user['id']):
+        res = ProductService().update_name(product_name["old_name"], product_name["new_name"], update.message.from_user['id'])
 
         if res:
             update.message.reply_text("Done", reply_markup=markup)
@@ -267,16 +277,16 @@ def change_update_db(update, context):
 
 
 def get_url_set_name(update, context):
-    if ProductService().count_amazon_product() > 1:
+    if ProductService().count_amazon_product(update.message.from_user['id']) > 1:
         update.message.reply_text("Enter the name of the product that you want get url: ", reply_markup=markup)
 
         return GET_URL_SECOND_STEP
 
-    elif ProductService().count_amazon_product() == 1:
-        name = ProductService().get_first_name()
+    elif ProductService().count_amazon_product(update.message.from_user['id']) == 1:
+        name = ProductService().get_first_name(update.message.from_user['id'])
 
-        if ProductService().check_name(name) and name:
-            url = ProductService().get_url_by_name(name)
+        if ProductService().check_name(name, update.message.from_user['id']) and name:
+            url = ProductService().get_url_by_name(name, update.message.from_user['id'])
 
             update.message.reply_text(url, reply_markup=markup)
         else:
@@ -291,8 +301,8 @@ def get_url_set_name(update, context):
 def get_url_search_db(update, context):
     name = update.message.text
 
-    if ProductService().check_name(name):
-        res = ProductService().get_url_by_name(name)
+    if ProductService().check_name(name, update.message.from_user['id']):
+        res = ProductService().get_url_by_name(name, update.message.from_user['id'])
 
         if res:
             update.message.reply_text(res, reply_markup=markup)
@@ -326,7 +336,7 @@ def check_price(context):
 
     amazon_info = "Updates: \n"
 
-    amazon_product = ProductService().get_amazon_urls()
+    amazon_product = ProductService().get_amazon_urls(user_id)
     camel_product = ProductService().get_camel_urls()
 
     amazon_thread = CrawlerThread(amazon_product, amazon_crawler, 900)
@@ -425,7 +435,7 @@ def main():
     dp.add_handler(con_handler)
     dp.add_error_handler(error)
 
-    job.run_repeating(check_price, interval=((ProductService().count_amazon_product() + 1) * 900))
+    job.run_repeating(check_price, interval=((ProductService().count_amazon_product(user_id) + 1) * 900))
 
     updater.start_polling()
     updater.idle()
