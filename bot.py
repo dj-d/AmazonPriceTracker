@@ -1,5 +1,5 @@
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, ConversationHandler)
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from emoji import emojize
 import validators
 import json
@@ -70,6 +70,7 @@ def check_url(url):
 
 def start_conversation(update, context):
     global user_id
+
     user_id = update.message.from_user['id']
     username = update.message.from_user['username']
 
@@ -381,6 +382,16 @@ def error(update, context):
     logger.error('Update "%s" caused error "%s"', update, context.error)
 
 
+def cancel(update, context):
+    user = update.message.from_user
+    logger.info("User %s canceled the conversation.", user.first_name)
+    update.message.reply_text(
+        'Bye! I hope we can talk again some day.', reply_markup=ReplyKeyboardRemove()
+    )
+
+    return ConversationHandler.END
+
+
 def main():
     updater = Updater(TOKEN, use_context=True)
 
@@ -429,7 +440,7 @@ def main():
             ]
         },
 
-        fallbacks=[]  # With this method it doesn't work, I added an if to all occurrences
+        fallbacks=[CommandHandler('cancel', cancel)]
     )
 
     dp.add_handler(con_handler)
