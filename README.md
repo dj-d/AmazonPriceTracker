@@ -19,6 +19,7 @@ The bot can be launched via Python command or via Docker
 Enter the project folder and run the following commands
 
 ```
+python3 -m pip install -r requirements.txt
 python3 bot.py
 ```
 
