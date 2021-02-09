@@ -20,6 +20,12 @@ jobs:
         uses: actions/checkout@master
       - name: Analyze with SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: my-custom-directory
+          args: >
+            -Dsonar.organization=djd-organization
+            -Dsonar.projectKey=amazon_price_tracker_key
+            -Dsonar.sources=.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
