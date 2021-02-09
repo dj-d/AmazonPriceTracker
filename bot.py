@@ -76,7 +76,7 @@ def start_conversation(update, context):
     print("user_id: " + str(user_id))
     print("username: " + str(username))
 
-    msg = "Hi " + username + ",\n" \
+    msg = "Hi @" + username + ",\n" \
           "This bot was created to track the price of products taken on Amazon.\n" \
           "It is not yet in final version, but for those who want to contribute the link to the repository is: https://github.com/dj-d/AmazonPriceTracker\n"
 

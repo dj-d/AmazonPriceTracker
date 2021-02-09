@@ -250,6 +250,31 @@ class AmazonModel:
 
             return False
 
+    def get_price_crawler(self, url):
+        """
+        Get price of a product by URL
+
+        @param url: URL of the product
+        @return: Price of the product | False
+        """
+
+        query = """
+                SELECT price
+                FROM amazon
+                WHERE url=?
+                """
+
+        try:
+            res = self.curs.execute(query, (url,)).fetchone()
+            self.conn.commit()
+
+            return res[0]
+
+        except Exception as e:
+            logger.exception("AmazonModel -> get_price")
+
+            return False
+
     def get_urls(self, chat_id):
         """
         Get all urls
@@ -342,6 +367,32 @@ class AmazonModel:
 
         try:
             self.curs.execute(query, (new_price, url, chat_id))
+            self.conn.commit()
+
+            return True
+
+        except Exception as e:
+            logger.exception("AmazonModel -> update_price")
+
+            return False
+
+    def update_price_crawler(self, url, new_price):
+        """
+        Update price of a product by URL
+
+        @param url: URL of the product
+        @param new_price: New price of the product
+        @return: True | False
+        """
+
+        query = """
+                UPDATE amazon
+                SET price=?
+                WHERE url=?
+                """
+
+        try:
+            self.curs.execute(query, (new_price, url))
             self.conn.commit()
 
             return True

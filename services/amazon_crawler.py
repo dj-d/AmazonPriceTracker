@@ -74,7 +74,7 @@ def check_price(url):
     new_data = get_data(url)
 
     if new_data:
-        actual_price = AmazonModel().get_price(url)
+        actual_price = AmazonModel().get_price_crawler(url)
 
         if new_data["price"] != actual_price:
             data = {
@@ -83,7 +83,7 @@ def check_price(url):
                 "new_price": new_data["price"]
             }
 
-            AmazonModel().update_price(url, new_data["price"])
+            AmazonModel().update_price_crawler(url, new_data["price"])
 
             return data
         else:

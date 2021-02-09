@@ -17,6 +17,7 @@ class ProductService:
 
         @param name: Name of product
         @param url: URL of Amazon product
+        @param chat_id:
         @return: dict
         """
 
@@ -78,6 +79,7 @@ class ProductService:
         Get name of a product
 
         @param url: URL of the product
+        @param chat_id:
         @return: Name of the product | False
         """
 
@@ -107,6 +109,7 @@ class ProductService:
         Get the URL by a name
 
         @param name: Name of the product
+        @param chat_id:
         @return: String | False
         """
 
@@ -117,6 +120,7 @@ class ProductService:
         Get price of a product by URL
 
         @param url: URL of the product
+        @param chat_id:
         @return: Price of the product | False
         """
         return self.amazon_model.get_price(url, chat_id)
@@ -125,6 +129,7 @@ class ProductService:
         """
         Get all urls in Amazon table
 
+        @param chat_id:
         @return: list(url) | False
         """
 
@@ -173,6 +178,7 @@ class ProductService:
 
         @param old_name: Current name of the product
         @param new_name: New name
+        @param chat_id:
         @return: True | False
         """
 
@@ -183,6 +189,7 @@ class ProductService:
         Check if a name exists
 
         @param name: Name of the product
+        @param chat_id:
         @return: True | False
         """
 
@@ -193,6 +200,7 @@ class ProductService:
         Check if a URL exists in Amazon table
 
         @param url: URL of the product
+        @param chat_id:
         @return: True | False
         """
 
