@@ -1,4 +1,5 @@
 ![SonarQube](https://github.com/dj-d/AmazonPriceTracker/workflows/SonarQube/badge.svg)
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=bugs)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=code_smells)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=security_rating)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
