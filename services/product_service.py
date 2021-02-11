@@ -1,5 +1,5 @@
 from models.product_model import AmazonModel, CamelModel
-from services import amazon_crawler, camel_crawler
+from crawlers import amazon_crawler, camel_crawler
 
 
 class ProductService:
@@ -85,16 +85,6 @@ class ProductService:
         """
 
         return self.amazon_model.get_name(chat_id, url)
-
-    def get_name_thread(self, url):
-        """
-        Get name of a product
-
-        @param url: URL of the product
-        @return: Name of the product | False
-        """
-
-        return self.amazon_model.get_name_thread(url)
 
     def get_first_name(self, chat_id):
         """
