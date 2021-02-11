@@ -35,7 +35,7 @@ class Schema:
                 chat_id INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 product_name TEXT NOT NULL,
-                url TEXT NOT NULL UNIQUE PRIMARY KEY,
+                url TEXT NOT NULL,
                 price REAL NOT NULL
                 );
                 """
@@ -182,31 +182,6 @@ class AmazonModel:
 
             return False
 
-    def get_name_thread(self, url):
-        """
-        Get name of a product by URL
-
-        @param url: URL of the product
-        @return: Name of the product | False
-        """
-
-        query = """
-                SELECT name
-                FROM amazon
-                WHERE url=?
-                """
-
-        try:
-            res = self.curs.execute(query, (url,)).fetchone()
-            self.conn.commit()
-
-            return res[0]
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_name")
-
-            return False
-
     def get_first_name(self, chat_id):
         """
         Get name at first row of table
@@ -249,31 +224,6 @@ class AmazonModel:
 
         try:
             res = self.curs.execute(query, (chat_id, url)).fetchone()
-            self.conn.commit()
-
-            return res[0]
-
-        except Exception as e:
-            logger.exception("AmazonModel -> get_price")
-
-            return False
-
-    def get_price_crawler(self, url):
-        """
-        Get price of a product by URL
-
-        @param url: URL of the product
-        @return: Price of the product | False
-        """
-
-        query = """
-                SELECT price
-                FROM amazon
-                WHERE url=?
-                """
-
-        try:
-            res = self.curs.execute(query, (url,)).fetchone()
             self.conn.commit()
 
             return res[0]
@@ -379,32 +329,6 @@ class AmazonModel:
 
         try:
             self.curs.execute(query, (new_price, chat_id, url))
-            self.conn.commit()
-
-            return True
-
-        except Exception as e:
-            logger.exception("AmazonModel -> update_price")
-
-            return False
-
-    def update_price_crawler(self, url, new_price):
-        """
-        Update price of a product by URL
-
-        @param url: URL of the product
-        @param new_price: New price of the product
-        @return: True | False
-        """
-
-        query = """
-                UPDATE amazon
-                SET price=?
-                WHERE url=?
-                """
-
-        try:
-            self.curs.execute(query, (new_price, url))
             self.conn.commit()
 
             return True
