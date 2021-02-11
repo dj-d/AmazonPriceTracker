@@ -9,22 +9,24 @@ logger = logging_service.get_logger()
 
 
 class CrawlerThread(Thread):
-    def __init__(self, products, service, time):
+    def __init__(self, products, service, time, chat_id):
         Thread.__init__(self)
+
         self.products = products
         self.service = service
         self.time = time
         self.changes = []
+        self.chat_id = chat_id
 
     def run(self):
         for url in self.products:
-            name = ProductService().get_name_thread(url[0])
+            name = ProductService().get_name(self.chat_id, url[0])
             # service_name = str(self.service).split("/")[8].replace(".py'>", "")
             service_name = str(self.service).split("/")[3].replace(".py'>", "")  # For Docker
 
             logger.info(service_name + " -> " + name + "...")
 
-            new_info = self.service.check_price(url[0])
+            new_info = self.service.check_price(self.chat_id, url[0])
 
             if new_info:
                 if service_name == "amazon_crawler":
