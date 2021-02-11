@@ -63,10 +63,11 @@ def get_data(url):
         return False
 
 
-def check_price(url):
+def check_price(chat_id, url):
     """
     Compare the new price taken by website with those into the Amazon table
 
+    @param chat_id:
     @param url: URL of product
     @return: dict(url, actual_price, new_price) | False
     """
@@ -74,7 +75,7 @@ def check_price(url):
     new_data = get_data(url)
 
     if new_data:
-        actual_price = AmazonModel().get_price_crawler(url)
+        actual_price = AmazonModel().get_price(chat_id, url)
 
         if new_data["price"] != actual_price:
             data = {
@@ -83,7 +84,7 @@ def check_price(url):
                 "new_price": new_data["price"]
             }
 
-            AmazonModel().update_price_crawler(url, new_data["price"])
+            AmazonModel().update_price(chat_id, url, new_data["price"])
 
             return data
         else:
