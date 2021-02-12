@@ -150,10 +150,11 @@ def format_db_data(raw_data):
     return new_data
 
 
-def check_price(url):
+def check_price(chat_id, url):
     """
     Compare the new prices taken by website with those into the Camel table
 
+    @param chat_id:
     @param url: URL of Amazon product
     @return: list(dict) | False
     """
@@ -162,7 +163,7 @@ def check_price(url):
 
     new_data = get_info(url)
 
-    raw_actual_data = CamelModel().get_price_info(url)
+    raw_actual_data = CamelModel().get_price_info(chat_id, url)
 
     if new_data and raw_actual_data:
         actual_data = format_db_data(raw_actual_data)
@@ -180,7 +181,7 @@ def check_price(url):
                         "new_price": new_data[i]["info"][j]["price"]
                     }
 
-                    CamelModel().update_price(url, actual_data[i]["type"], actual_data[i]["info"][j]["supplier"], new_data[i]["info"][j]["price"])
+                    CamelModel().update_price(chat_id, url, actual_data[i]["type"], actual_data[i]["info"][j]["supplier"], new_data[i]["info"][j]["price"])
 
                     new_info.append(data)
 

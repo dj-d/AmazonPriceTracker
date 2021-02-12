@@ -41,4 +41,8 @@ docker build -t amazon_price_tracker .
 docker run -d --name=amazon_price_tracker -it amazon_price_tracker
 ```
 
+## Link
+
+Telegram Bot: _[AmazonPriceTracker](https://t.me/djd_apt_bot)_
+
 ## Support
