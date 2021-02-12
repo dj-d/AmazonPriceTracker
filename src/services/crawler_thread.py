@@ -1,5 +1,5 @@
-from services.logging_service import LoggingService
-from services.product_service import ProductService
+from .logging_service import LoggingService
+from .product_service import ProductService
 from threading import Thread
 from time import sleep
 

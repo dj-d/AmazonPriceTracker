@@ -4,13 +4,13 @@ from emoji import emojize
 import validators
 import json
 
-from services.logging_service import LoggingService
+from src.services.logging_service import LoggingService
+from src.services.product_service import ProductService
+from src.services.crawler_thread import CrawlerThread
 
-from models.product_model import Schema
-from crawlers import amazon_crawler, camel_crawler
-from services.product_service import ProductService
+from src.models.product_model import Schema
 
-from services.crawler_thread import CrawlerThread
+from src.crawlers import amazon_crawler, camel_crawler
 
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
