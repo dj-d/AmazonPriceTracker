@@ -1,4 +1,9 @@
 ![SonarQube](https://github.com/dj-d/AmazonPriceTracker/workflows/SonarQube/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=alert_status)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=bugs)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=code_smells)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=security_rating)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=dj-d_AmazonPriceTracker&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=dj-d_AmazonPriceTracker)
 
 # AmazonPriceTracker
 Telegram bot to check the price change of products on Amazon and CamelCamelCamel
@@ -19,6 +24,7 @@ The bot can be launched via Python command or via Docker
 Enter the project folder and run the following commands
 
 ```
+python3 -m pip install -r requirements.txt
 python3 bot.py
 ```
 
