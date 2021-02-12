@@ -1,13 +1,17 @@
 FROM python:3-alpine
 
-COPY requirements.txt /bot/
+RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev
+
 WORKDIR /bot
 
-RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev
-RUN pip install -r requirements.txt
+COPY requirements.txt .
+
 RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 RUN apk add --no-cache sqlite
 
-COPY .  /bot
+COPY src src
+COPY credential.json .
+COPY main.py .
 
-CMD ["python", "bot.py"]
+CMD ["python", "main.py"]

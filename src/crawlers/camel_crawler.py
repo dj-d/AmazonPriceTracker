@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-from UserAgent import UserAgent
-from models.product_model import CamelModel
-from services.logging_service import LoggingService
+from src.UserAgent import UserAgent
+from src.models.product_model import CamelModel
+from src.services.logging_service import LoggingService
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
