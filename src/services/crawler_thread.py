@@ -3,6 +3,8 @@ from .product_service import ProductService
 from threading import Thread
 from time import sleep
 
+import constant
+
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
 logger = logging_service.get_logger()
@@ -31,21 +33,21 @@ class CrawlerThread(Thread):
             if new_info:
                 if service_name == "amazon_crawler":
                     if new_info["actual_price"] < new_info["new_price"]:
-                        self.changes.append(name + " has risen from €" + str(new_info["actual_price"]) + " to €" + str(new_info["new_price"]))
+                        self.changes.append(name + " has risen from €" + str(new_info["actual_price"]) + constant.TO_EURO + str(new_info["new_price"]))
                     else:
-                        self.changes.append(name + " has come down from €" + str(new_info["actual_price"]) + " to €" + str(new_info["new_price"]))
+                        self.changes.append(name + " has come down from €" + str(new_info["actual_price"]) + constant.TO_EURO + str(new_info["new_price"]))
 
                 elif service_name == "camel_crawler":
                     i = 0
                     while i < len(new_info):
-                        type = new_info[i]["type"]
+                        price_type = new_info[i]["type"]
                         supplier = new_info[i]["supplier"]
 
                         if float(new_info[i]["actual_price"]) < float(new_info[i]["new_price"]):
-                            self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has risen from €" + str(new_info[i]["actual_price"]) + " to €" + str(new_info[i]["new_price"]))
+                            self.changes.append(name + ", sold by: " + supplier + " (" + price_type + ")" + " has risen from €" + str(new_info[i]["actual_price"]) + constant.TO_EURO + str(new_info[i]["new_price"]))
 
                         else:
-                            self.changes.append(name + ", sold by: " + supplier + " (" + type + ")" + " has come down from €" + str(new_info[i]["actual_price"]) + " to €" + str(new_info[i]["new_price"]))
+                            self.changes.append(name + ", sold by: " + supplier + " (" + price_type + ")" + " has come down from €" + str(new_info[i]["actual_price"]) + constant.TO_EURO + str(new_info[i]["new_price"]))
 
                         i += 1
 
