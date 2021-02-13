@@ -48,7 +48,7 @@ def get_data(url):
         else:
             return False  # Quando non ci sono dati ritarna False
 
-    except Exception as e:
+    except Exception:
         logger.exception("camel_crawler -> get_data")
 
         return False

@@ -13,7 +13,6 @@ availability_id = "availability"
 our_price_id = "priceblock_ourprice"
 deal_price_id = "priceblock_dealprice"
 
-# header = {"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0"}
 header = {"User-Agent": UserAgent().random()}
 
 
@@ -57,7 +56,7 @@ def get_data(url):
 
         return data
 
-    except Exception as e:
+    except Exception:
         logger.exception("amazon_crawler -> get_data")
 
         return False

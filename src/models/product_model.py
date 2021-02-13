@@ -101,7 +101,7 @@ class AmazonModel:
 
             return True
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> create")
 
             return False
@@ -126,7 +126,7 @@ class AmazonModel:
 
             return True
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> delete")
 
             return False
@@ -151,7 +151,7 @@ class AmazonModel:
 
             return res
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> get_info")
 
             return False
@@ -177,7 +177,7 @@ class AmazonModel:
 
             return res[0]
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> get_name")
 
             return False
@@ -202,7 +202,7 @@ class AmazonModel:
 
             return res[0]
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> get_first_name")
 
             return False
@@ -228,7 +228,7 @@ class AmazonModel:
 
             return res[0]
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> get_price")
 
             return False
@@ -253,7 +253,7 @@ class AmazonModel:
 
             return res
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> get_urls")
 
             return False
@@ -279,7 +279,7 @@ class AmazonModel:
 
             return res[0]
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> get_url_by_name")
 
             return False
@@ -306,7 +306,7 @@ class AmazonModel:
 
             return True
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> update_name")
 
             return False
@@ -333,7 +333,7 @@ class AmazonModel:
 
             return True
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> update_price")
 
             return False
@@ -361,7 +361,7 @@ class AmazonModel:
 
             return bool(res[0])
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> check_name")
 
             return False
@@ -389,7 +389,7 @@ class AmazonModel:
 
             return bool(res[0])
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> check_url")
 
             return False
@@ -414,7 +414,7 @@ class AmazonModel:
 
             return res[0]
 
-        except Exception as e:
+        except Exception:
             logger.exception("AmazonModel -> count_product")
 
             return False
@@ -454,7 +454,7 @@ class CamelModel:
 
             return True
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> create")
 
             return False
@@ -479,7 +479,7 @@ class CamelModel:
 
             return True
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> delete")
 
             return False
@@ -504,7 +504,7 @@ class CamelModel:
 
             return res
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> get_info")
 
             return False
@@ -530,7 +530,7 @@ class CamelModel:
 
             return res
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> get_price_info")
 
             return False
@@ -555,7 +555,7 @@ class CamelModel:
 
             return res
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> get_urls")
 
             return False
@@ -584,7 +584,7 @@ class CamelModel:
 
             return True
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> update_price")
 
             return False
@@ -612,7 +612,7 @@ class CamelModel:
 
             return bool(res[0])
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> check_url")
 
             return False
@@ -637,7 +637,7 @@ class CamelModel:
 
             return int(res[0] / 12)
 
-        except Exception as e:
+        except Exception:
             logger.exception("CamelModel -> count_product")
 
             return False
