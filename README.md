@@ -9,7 +9,7 @@
 Telegram bot to check the price change of products on Amazon and CamelCamelCamel
 
 ## Setup
-In the credential.json replace "__*YOUR_BOT_TOKEN*__" with the token of your bot.
+In the credential.json replace "__*YOUR_BOT_TOKEN*__" with the token of your Telegram bot.
 
 ```json
 {
@@ -21,20 +21,22 @@ In the credential.json replace "__*YOUR_BOT_TOKEN*__" with the token of your bot
 The bot can be launched via Python command or via Docker
 
 ### Command Line
-Enter the project folder and run the following commands
+Into _src/services/crawler_thread.py_ decomment _service_name_ for Command Line
+
+Go into main folder and run the following commands:
 
 ```
 python3 -m pip install -r requirements.txt
-python3 bot.py
+python3 main.py
 ```
 
 ### Docker
 
 #### Automated
-For Linux users, to automate the steps, you can use the script __*build_and_run.sh*__.
+For Linux users (with bash), to automate the steps, you can use the script __*build_and_run.sh*__.
 
 #### Manual
-Enter the project folder and run the following commands
+Go into main folder and run the following commands
 
 ```bash
 docker build -t amazon_price_tracker .
