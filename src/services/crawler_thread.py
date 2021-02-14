@@ -3,7 +3,7 @@ from .product_service import ProductService
 from threading import Thread
 from time import sleep
 
-import constant
+from . import constant
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
