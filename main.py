@@ -25,12 +25,12 @@ CHOOSING, ADD_SECOND_STEP, ADD_THIRD_STEP, REMOVE_SECOND_STEP, CHANGE_SECOND_STE
 
 reply_keyboard = [
     [
-        emojize(":clipboard: Amazon list", use_aliases=True),
+        emojize(":clipboard: Product list", use_aliases=True),
         emojize(" :heavy_plus_sign: Add", use_aliases=True),
         emojize(":page_with_curl: Get url", use_aliases=True)
     ],
     [
-        emojize(":clipboard: Camel list", use_aliases=True),
+        emojize(":clipboard: More info", use_aliases=True),
         emojize(':wastebasket: Remove', use_aliases=True),
         emojize(":twisted_rightwards_arrows: Change name", use_aliases=True)
     ],
@@ -319,10 +319,20 @@ def get_url_search_db(update, context):
 
 
 def command_list(update, context):
-    info = "Command list: \n"
+    info = "Command List:\n"
 
-    info += "   - /start -> Start bot \n"
-    info += "   - /stop -> Stop any action"
+    info += "   - /start: Start or restart the bot \n" \
+            "   - /stop: Stop any action \n" \
+            "   - /product_list: The list of all products and their prices \n" \
+            "   - /add: Add a new product \n" \
+            "   - /remove: Remove a product \n" \
+            "   - /more_info: More information about the price of a product \n" \
+            "   - /get_url: Get the URL of a product \n" \
+            "   - /change_name: Changing the name of a product \n" \
+            "   - /help: View this message \n"
+
+    info += "\nP.S. When doing any operation, whether it's starting an action or entering text, " \
+            "before doing anything else wait for the bot to respond to your last sent message."
 
     update.message.reply_text(info, reply_markup=markup)
 
@@ -403,13 +413,22 @@ def main():
 
         states={
             CHOOSING: [
-                MessageHandler(Filters.regex('Amazon list'), amazon_product_list),
+                MessageHandler(Filters.regex('Product list'), amazon_product_list),
                 MessageHandler(Filters.regex('Add'), add_set_name),
                 MessageHandler(Filters.regex('Remove'), remove_set_name),
-                MessageHandler(Filters.regex('Camel list'), camel_product_list),
+                MessageHandler(Filters.regex('More info'), camel_product_list),
                 MessageHandler(Filters.regex('Get url'), get_url_set_name),
                 MessageHandler(Filters.regex('Change name'), change_set_old_name),
-                MessageHandler(Filters.regex('Help'), command_list)
+                MessageHandler(Filters.regex('Help'), command_list),
+
+                # TODO: To improve
+                MessageHandler(Filters.regex('product_list'), amazon_product_list),
+                MessageHandler(Filters.regex('add'), add_set_name),
+                MessageHandler(Filters.regex('remove'), remove_set_name),
+                MessageHandler(Filters.regex('more_info'), camel_product_list),
+                MessageHandler(Filters.regex('get_url'), get_url_set_name),
+                MessageHandler(Filters.regex('change_name'), change_set_old_name),
+                MessageHandler(Filters.regex('help'), command_list)
             ],
 
             ADD_SECOND_STEP: [
