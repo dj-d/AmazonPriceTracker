@@ -92,15 +92,15 @@ def start_conversation(update, context):
     return CHOOSING
 
 
-def amazon_product_list(update, context):
+def product_list(update, context):
     products = ProductService().get_amazon_info(
         chat_id=update.message.from_user['id']
     )
 
-    info = "Amazon products: \n"
+    info = "Products list: \n"
 
     if not products:
-        info += "   - Any products"
+        info += "   - Any product"
     else:
         for element in products:
             if element[1] != -1:
@@ -114,12 +114,12 @@ def amazon_product_list(update, context):
 
 
 # TODO: Make for only one product
-def camel_product_list(update, context):
+def more_info(update, context):
     products = ProductService().get_camel_info(
         chat_id=update.message.from_user['id']
     )
 
-    info = "Camel products: \n"
+    info = "More info: \n"
 
     if not products:
         info += "   - Any products"
@@ -589,7 +589,7 @@ def main():
 
     dp = updater.dispatcher
 
-    job = updater.job_queue
+    # job = updater.job_queue
 
     con_handler = ConversationHandler(
         entry_points=[
@@ -598,19 +598,19 @@ def main():
 
         states={
             CHOOSING: [
-                MessageHandler(Filters.regex('Product list'), amazon_product_list),
+                MessageHandler(Filters.regex('Product list'), product_list),
                 MessageHandler(Filters.regex('Add'), add_set_name),
                 MessageHandler(Filters.regex('Remove'), remove_set_name),
-                MessageHandler(Filters.regex('More info'), camel_product_list),
+                MessageHandler(Filters.regex('More info'), more_info),
                 MessageHandler(Filters.regex('Get url'), get_url_set_name),
                 MessageHandler(Filters.regex('Change name'), change_set_old_name),
                 MessageHandler(Filters.regex('Help'), command_list),
 
                 # TODO: To improve
-                MessageHandler(Filters.regex('product_list'), amazon_product_list),
+                MessageHandler(Filters.regex('product_list'), product_list),
                 MessageHandler(Filters.regex('add'), add_set_name),
                 MessageHandler(Filters.regex('remove'), remove_set_name),
-                MessageHandler(Filters.regex('more_info'), camel_product_list),
+                MessageHandler(Filters.regex('more_info'), more_info),
                 MessageHandler(Filters.regex('get_url'), get_url_set_name),
                 MessageHandler(Filters.regex('change_name'), change_set_old_name),
                 MessageHandler(Filters.regex('help'), command_list)
@@ -647,10 +647,10 @@ def main():
     dp.add_handler(con_handler)
     dp.add_error_handler(error)
 
-    job.run_repeating(
-        callback=check_price,
-        interval=((ProductService().count_amazon_product(user_id) + 1) * 900)
-    )
+    # job.run_repeating(
+    #     callback=check_price,
+    #     interval=((ProductService().count_amazon_product(user_id) + 1) * 900)
+    # )
 
     updater.start_polling()
     updater.idle()
