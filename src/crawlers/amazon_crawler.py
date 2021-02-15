@@ -4,14 +4,11 @@ from src.models.product_model import AmazonModel
 from src.user_agent.UserAgent import UserAgent
 from src.services.logging_service import LoggingService
 
+from . import constant
+
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
 logger = logging_service.get_logger()
-
-name_id = "productTitle"
-availability_id = "availability"
-our_price_id = "priceblock_ourprice"
-deal_price_id = "priceblock_dealprice"
 
 header = {"User-Agent": UserAgent().random()}
 
@@ -34,16 +31,16 @@ def get_data(url):
 
         soup = BeautifulSoup(page.content, "html.parser")
 
-        title = soup.find(id=name_id).get_text().strip()
+        title = soup.find(id=constant.NAME_ID).get_text().strip()
         data["name"] = title
 
-        availability = soup.find(id=availability_id).get_text().strip().replace("\n", "").split(".")
+        availability = soup.find(id=constant.AVAILABILITY_ID).get_text().strip().replace("\n", "").split(".")
 
         if availability[0] != "Attualmente non disponibile":
-            raw_price = soup.find(id=our_price_id)
+            raw_price = soup.find(id=constant.OUR_PRICE_ID)
 
             if raw_price is None:
-                raw_price = soup.find(id=deal_price_id)
+                raw_price = soup.find(id=constant.DEAL_PRICE_ID)
 
             if raw_price is not None:
                 data["price"] = float(raw_price.get_text().replace("€", "").replace(",", ".").strip())
