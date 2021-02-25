@@ -1,11 +1,11 @@
 import sqlite3
+
+from . import constant
 from src.services.logging_service import LoggingService
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 
 logger = logging_service.get_logger()
-
-DB_NAME = "bot.db"
 
 
 class Schema:
@@ -13,7 +13,7 @@ class Schema:
     Provide methods for db management
     """
 
-    def __init__(self, db_name=DB_NAME):
+    def __init__(self, db_name=constant.DB_NAME):
         self.conn = sqlite3.connect(db_name)
         self.curs = self.conn.cursor()
         self.create_amazon_table()
@@ -73,7 +73,7 @@ class AmazonModel:
 
     AMAZON_TABLE_NAME = "amazon"
 
-    def __init__(self, db_url=DB_NAME):
+    def __init__(self, db_url=constant.DB_NAME):
         self.conn = sqlite3.connect(db_url)
         self.conn.row_factory = sqlite3.Row
         self.curs = self.conn.cursor()
@@ -427,7 +427,7 @@ class CamelModel:
 
     CAMEL_TABLE_NAME = "camel"
 
-    def __init__(self, db_url=DB_NAME):
+    def __init__(self, db_url=constant.DB_NAME):
         self.conn = sqlite3.connect(db_url)
         self.conn.row_factory = sqlite3.Row
         self.curs = self.conn.cursor()
