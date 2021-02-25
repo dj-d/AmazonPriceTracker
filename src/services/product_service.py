@@ -1,5 +1,5 @@
-from src.models.product_model import AmazonModel, CamelModel
-from src.crawlers import amazon_crawler, camel_crawler
+from ..models.product_model import AmazonModel, CamelModel
+from ..crawlers import amazon_crawler, camel_crawler
 
 
 class ProductService:

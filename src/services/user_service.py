@@ -1,4 +1,4 @@
-from src.models.user_model import UserModel
+from ..models.user_model import UserModel
 
 
 class UserService:

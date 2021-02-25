@@ -1,7 +1,7 @@
 import sqlite3
 
 from . import constant
-from src.services.logging_service import LoggingService
+from ..services.logging_service import LoggingService
 
 logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
 

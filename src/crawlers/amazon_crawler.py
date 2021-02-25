@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
-from src.models.product_model import AmazonModel
-from src.user_agent.UserAgent import UserAgent
-from src.services.logging_service import LoggingService
+
+from ..models.product_model import AmazonModel
+from ..user_agent.UserAgent import UserAgent
+from ..services.logging_service import LoggingService
 
 from . import constant
 

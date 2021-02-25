@@ -7,7 +7,7 @@ import json
 from src.services.logging_service import LoggingService
 from src.services.user_service import UserService
 from src.services.product_service import ProductService
-from src.services.crawler_thread import CrawlerThread
+from src.threads.crawler_thread import CrawlerThread
 
 from src.models.user_model import Schema as UserSchema
 from src.models.product_model import Schema as ProductSchema
@@ -599,7 +599,7 @@ def main():
 
     dp = updater.dispatcher
 
-    # job = updater.job_queue
+    job = updater.job_queue
 
     con_handler = ConversationHandler(
         entry_points=[
@@ -657,10 +657,10 @@ def main():
     dp.add_handler(con_handler)
     dp.add_error_handler(error)
 
-    # job.run_repeating(
-    #     callback=check_price,
-    #     interval=((ProductService().count_amazon_product(user_id) + 1) * 900)
-    # )
+    job.run_repeating(
+        callback=check_price,
+        interval=((ProductService().count_amazon_product(user_id) + 1) * 900)
+    )
 
     updater.start_polling()
     updater.idle()
