@@ -5,10 +5,12 @@ import validators
 import json
 
 from src.services.logging_service import LoggingService
+from src.services.user_service import UserService
 from src.services.product_service import ProductService
 from src.services.crawler_thread import CrawlerThread
 
-from src.models.product_model import Schema
+from src.models.user_model import Schema as UserSchema
+from src.models.product_model import Schema as ProductSchema
 
 from src.crawlers import amazon_crawler, camel_crawler
 
@@ -73,6 +75,14 @@ def start_conversation(update, context):
 
     user_id = update.message.from_user['id']
     username = update.message.from_user['username']
+
+    if not UserService().exist(user_id):
+        UserService().add(
+            id=user_id,
+            first_name=update.message.from_user['first_name'],
+            last_name=update.message.from_user['last_name'],
+            username=username
+        )
 
     msg = "Hi @" + username + ",\n" \
           "This bot was created to track the price of products taken on Amazon.\n" \
@@ -657,5 +667,6 @@ def main():
 
 
 if __name__ == '__main__':
-    Schema()
+    UserSchema()
+    ProductSchema()
     main()
