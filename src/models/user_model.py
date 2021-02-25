@@ -56,22 +56,6 @@ class UserModel:
             logger.exception("UserModel -> create -> Error -> " + str(e))
 
             return False
-        except sqlite3.IntegrityError as e:
-            logger.exception("UserModel -> create -> IntegrityError -> " + str(e))
-
-            return False
-        except sqlite3.ProgrammingError as e:
-            logger.exception("UserModel -> create -> ProgrammingError -> " + str(e))
-
-            return False
-        except sqlite3.OperationalError as e:
-            logger.exception("UserModel -> create -> OperationalError -> " + str(e))
-
-            return False
-        except sqlite3.NotSupportedError as e:
-            logger.exception("UserModel -> create -> NotSupportedError -> " + str(e))
-
-            return False
 
     def delete(self, id):
         query = """
@@ -90,22 +74,6 @@ class UserModel:
             return False
         except sqlite3.Error as e:
             logger.exception("UserModel -> delete -> Error -> " + str(e))
-
-            return False
-        except sqlite3.IntegrityError as e:
-            logger.exception("UserModel -> delete -> IntegrityError -> " + str(e))
-
-            return False
-        except sqlite3.ProgrammingError as e:
-            logger.exception("UserModel -> delete -> ProgrammingError -> " + str(e))
-
-            return False
-        except sqlite3.OperationalError as e:
-            logger.exception("UserModel -> delete -> OperationalError -> " + str(e))
-
-            return False
-        except sqlite3.NotSupportedError as e:
-            logger.exception("UserModel -> delete -> NotSupportedError -> " + str(e))
 
             return False
 
@@ -129,21 +97,5 @@ class UserModel:
             return False
         except sqlite3.Error as e:
             logger.exception("UserModel -> delete -> Error -> " + str(e))
-
-            return False
-        except sqlite3.IntegrityError as e:
-            logger.exception("UserModel -> delete -> IntegrityError -> " + str(e))
-
-            return False
-        except sqlite3.ProgrammingError as e:
-            logger.exception("UserModel -> delete -> ProgrammingError -> " + str(e))
-
-            return False
-        except sqlite3.OperationalError as e:
-            logger.exception("UserModel -> delete -> OperationalError -> " + str(e))
-
-            return False
-        except sqlite3.NotSupportedError as e:
-            logger.exception("UserModel -> delete -> NotSupportedError -> " + str(e))
 
             return False
