@@ -44,7 +44,7 @@ def get_data(url):
                 raw_price = soup.find(id=constant.DEAL_PRICE_ID)
 
             if raw_price is not None:
-                data["price"] = float(raw_price.get_text().replace("€", "").replace(",", ".").strip())
+                data["price"] = float(raw_price.get_text().replace("€", "").replace(".", "").replace(",", ".").strip())
             else:
                 data["price"] = -1
                 logger.error("amazon_crawler -> Price not find")

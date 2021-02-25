@@ -84,7 +84,7 @@ def format_website_data(raw_data):
             if raw_data[i + 1] == "Not in stock":
                 price = -1
             else:
-                price = raw_data[i + 1].replace(",", ".").replace("€", "")
+                price = raw_data[i + 1].replace(".", "").replace(",", ".").replace("€", "")
 
             info = {
                 "supplier": raw_data[i].replace("Prezzo ", "").strip().capitalize(),
