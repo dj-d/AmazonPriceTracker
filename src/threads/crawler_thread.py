@@ -6,7 +6,7 @@ from . import constant
 from ..services.logging_service import LoggingService
 from ..services.product_service import ProductService
 
-logging_service = LoggingService(name=__name__, formatter=None, datefmt=None, file_handler=None)
+logging_service = LoggingService(name=__name__)
 
 logger = logging_service.get_logger()
 
