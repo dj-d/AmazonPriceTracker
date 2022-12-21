@@ -7,6 +7,10 @@
 # AmazonPriceTracker
 Telegram bot to check the price change of products on Amazon and CamelCamelCamel
 
+# NOTICE
+_I am working on a new version that includes better structuring of resources and improved scalability. Unfortunately, my time for development is short so let's "give it time"_
+
+
 ## Setup
 In the credential.json replace "__*YOUR_BOT_TOKEN*__" with the token of your Telegram bot.
 
