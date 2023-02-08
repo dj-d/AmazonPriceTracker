@@ -2,5 +2,5 @@ python-telegram-bot==12.4.2
 emoji==0.5.4
 requests==2.23.0
 bs4==0.0.1
-cryptography==3.3.2
+cryptography==39.0.1
 validators==0.14.2
